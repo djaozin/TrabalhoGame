@@ -42,16 +42,32 @@ nome : 'Boss',
 'hp' : 45,
 'esq' : 8}}
 
+def testeEsq(): #Teste de Esquiva
+    d20_e = random.randint(0,20)
+    res_esq = d20_e + personagem['esq']
+    return res_esq
+
+def testeAtk(): #Teste de Ataque
+    d20_a = random.randint(0,20)
+    res_atk = d20_a + personagem['atk']
+    return res_atk
+
+def dano_causado1():
+    dano_causado1 = personagem['atk'] - monstros['MonstroFraco']['hp']
+
+def dano_causado2():
+    dano_causado2 = personagem['atk'] - monstros['MonstroMedio']['hp']
+
+def dano_causado3():
+    dano_causado3 = personagem['atk'] - monstros['MonstroDificil']['hp']
+
 print(f'Seja bem-vindo, {nome}. Você está entrando na caverna... ')
 print('Carregando...')
 time.sleep(1)
 
-print('Você chegou na entrada da caverna!')
-time.sleep(0.5)
-
 while True:
     desafio = random.randint(1 , 20)
-    if desafio >= 1 and desafio <=4:
+    if desafio >= 1 and desafio <=4: #Abertura de baús
         print('Você entrou em um desafio do baú!')
         time.sleep(0.5)
         tipo_bau = random.randint(1, 10)
@@ -80,12 +96,28 @@ while True:
 
             if tentativas == 0:
                 print('Baú perdido... Avançando para o proximo desafio.')
-    else:
-        print('Nenhum desafio encontrado. Avançando...')
+    
+    elif desafio >= 5 and desafio <= 20: #Combate contra monstros
+        print('Você Encontrou um monstro!')
+        mons = random.randint(0,100)
+        
+        if mons >= 0 and mons <= 39:
+            print('teste1')#monstro 1
+        
+        elif mons >= 40 and mons <= 69:
+            print('teste2')#monstro 2
+
+        elif mons >= 70 and mons <= 89:
+            print('teste3')#monstro 3 
+
+        elif mons >= 90 and mons <= 100:
+            print('testeB')#boss
+        
+
                 
     continuar = input('Deseja continuar enfrentando desafios? (s/n)')
     if continuar.lower() != 's':
         print('Saindo do jogo. Até a proxima!')
+        #Criar tela final contendo dados do jogador, quantas kills,etc
         break
-
 
