@@ -8,11 +8,39 @@ print('''----------A Lenda de Eldoria II----------
 
 nome = input('Nome do personagem: ')
 
-hp = 8
-atk = 2
-df = 1
-esq = 1
-exp = 0
+#Uso de dicionario para armazenar as informações do usuario
+personagem = {'nome' : nome,
+'hp': 8,
+'atk': 2,
+'df': 1,
+'esq': 1,
+'exp': 0}
+
+#Dicionario unico que armazena todos os monstros de uma vez, porém separados
+monstros = {'MonstroFraco' : {
+nome : 'Monstro Nvl1',
+'atk' : 3,
+'def' : 1,
+'hp' : 8,
+'esq' : 2},
+'MonstroMedio' : {
+nome : 'Monstro Nvl2',
+'atk' : 4,
+'def' : 1,
+'hp' : 12,
+'esq' : 4},
+'MonstroDificil' : {
+nome : 'Monstro Nvl3',
+'atk' : 6,
+'def' : 2,
+'hp' : 20,
+'esq' : 6},
+'MonstroChefe' : {
+nome : 'Boss',
+'atk' : 10,
+'def' : 5,
+'hp' : 45,
+'esq' : 8}}
 
 print(f'Seja bem-vindo, {nome}. Você está entrando na caverna... ')
 print('Carregando...')
