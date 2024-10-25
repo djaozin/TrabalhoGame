@@ -50,20 +50,6 @@ print('Você chegou na entrada da caverna!')
 time.sleep(0.5)
 
 while True:
-    print('Escolha uma das opções abaixo:')
-    print('1 - Explorar a caverna')
-    print('2 - Sair da caverna')
-    escolha = input('Digite o número da opção desejada: ')
-    if escolha == '1':
-        print('Você está explorando a caverna...')
-        time.sleep(1)
-        print('Você encontrou um desafio!')
-        time.sleep(0.5)
-    elif escolha == '2':
-        print('Você saiu da caverna.')
-    break
-
-while True:
     desafio = random.randint(1 , 20)
     if desafio >= 1 and desafio <=4:
         print('Você entrou em um desafio do baú!')
