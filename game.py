@@ -65,6 +65,15 @@ print(f'Seja bem-vindo, {nome}. Você está entrando na caverna... ')
 print('Carregando...')
 time.sleep(1)
 
+print ('-----Você chegou na caverna-----')
+menu = input ('''1 - Para entrar na caverna!\n
+2 - Não entrar na caverna''')
+if menu == 1:
+    print ('Você entrou!!')
+        
+elif menu == 2:
+    pass
+
 while True:
     desafio = random.randint(1 , 20)
     if desafio >= 1 and desafio <=4: #Abertura de baús
