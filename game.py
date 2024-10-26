@@ -111,16 +111,24 @@ while True:
         mons = random.randint(0,100)
         
         if mons >= 0 and mons <= 39:
-            print('teste1')#monstro 1
+            print('''1 - Atacar
+2 - Defender
+3 - Correr ''')#monstro 1
         
         elif mons >= 40 and mons <= 69:
-            print('teste2')#monstro 2
+            print('''1 - Atacar
+2 - Defender
+3 - Correr ''')#monstro 2
 
         elif mons >= 70 and mons <= 89:
-            print('teste3')#monstro 3 
+            print('''1 - Atacar
+2 - Defender
+3 - Correr ''')#monstro 3 
 
         elif mons >= 90 and mons <= 100:
-            print('testeB')#boss
+            print('''1 - Atacar
+2 - Defender
+3 - Correr ''')#boss
         
 
                 
