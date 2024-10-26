@@ -86,7 +86,7 @@ def dano_recebido(monstro_tipo):
     res_atkm = testeAtkM(monstro_tipo)
     res_esq = testeEsq()
     if res_esq > res_atkm:
-        print(f'{personagem['nome']} esquivou do ataque do oponente! Nenhum dano recebido.')
+        print(f"{personagem['nome']} esquivou do ataque do oponente! Nenhum dano recebido.")
 
     else:
         if res_atkm > personagem['def']:
@@ -95,7 +95,7 @@ def dano_recebido(monstro_tipo):
             print(f"{monstro['nome']} causou {dano} de dano ao {personagem['nome']}. HP restante do personagem: {personagem['hp']}")
             return dano
         else:
-            print(f'O ataque do {monstro['nome']} falhou! Defesa do {personagem['nome']} foi muito alta.')  
+            print(f"O ataque do {monstro['nome']} falhou! Defesa do {personagem['nome']} foi muito alta.")  
             
 def status():
     return f'''Seus status:
@@ -156,7 +156,7 @@ while True:
         mons = random.randint(0,100)
         
         if mons >= 0 and mons <= 39: #monstro 1
-            print(f'{personagem['nome']} VS {monstros["MonstroFraco"]['nome']}')
+            print(f"{personagem['nome']} VS {monstros['MonstroFraco']['nome']}")
             while personagem['hp'] > 0 and monstros['MonstroFraco']['hp'] > 0:
                 print('''Seu turno...
     1 - Atacar
@@ -177,7 +177,7 @@ while True:
                         exit()
             
         elif mons >= 40 and mons <= 69:
-            print(f'{personagem['nome']} VS {monstros["MonstroMedio"]['nome']}')
+            print(f"{personagem['nome']} VS {monstros['MonstroMedio']['nome']}")
             print('''1 - Atacar
 2 - Defender
 3 - Correr ''')#monstro 2
@@ -196,7 +196,7 @@ while True:
                         exit()
 
         elif mons >= 70 and mons <= 89:
-            print(f'{personagem['nome']} VS {monstros["MonstroDificil"]['nome']}')
+            print(f"{personagem['nome']} VS {monstros['MonstroDificil']['nome']}")
             print('''1 - Atacar
 2 - Defender
 3 - Correr ''')#monstro 3 
@@ -215,7 +215,7 @@ while True:
                         exit()
 
         elif mons >= 90 and mons <= 100:
-            print(f'{personagem['nome']} VS {monstros["MonstroChefe"]['nome']}')
+            print(f"{personagem['nome']} VS {monstros['MonstroChefe']['nome']}")
             print('''1 - Atacar
 2 - Defender
 3 - Correr ''')#boss
@@ -241,4 +241,3 @@ while True:
         print (status())
         #Criar tela final contendo dados do jogador, quantas kills,etc
         break
-
