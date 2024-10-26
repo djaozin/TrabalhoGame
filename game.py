@@ -95,7 +95,15 @@ def dano_recebido(monstro_tipo):
             print(f"{monstro['nome']} causou {dano} de dano ao {personagem['nome']}. HP restante do personagem: {personagem['hp']}")
             return dano
         else:
-            print(f'O ataque do {monstro['nome']} falhou! Defesa do {personagem['nome']} foi muito alta.')   
+            print(f'O ataque do {monstro['nome']} falhou! Defesa do {personagem['nome']} foi muito alta.')  
+            
+def status():
+    return f'''Seus status:
+HP: {personagem['hp']}
+ATK: {personagem['atk']}
+DEF: {personagem['df']}
+ESQ: {personagem['esq']}
+EXP: {personagem['exp']}'''
 
 print(f'Seja bem-vindo, {nome}. Você está entrando na caverna... ')
 print('Carregando...')
@@ -108,7 +116,8 @@ if menu == 1:
     print ('Você entrou!!')
         
 elif menu == 2:
-    pass
+    print ('Você saiu da caverna...')
+    exit()
 
 while True:
     desafio = random.randint(1 , 20)
@@ -157,31 +166,79 @@ while True:
                 if op == 1: #Ataque
                     testeEsqM("MonstroFraco")
                     dano_causado("MonstroFraco")
-                        
-
-
+                elif op == 3:
+                    correr=random.randint(1, 10)
+                    if correr >= 1 and correr <= 4:
+                        print('Você conseguiu correr!')
+                        break
+                    elif correr >= 5 and correr <= 10:
+                        print ('Você Morreu tentando correr...')
+                        print (status())
+                        exit()
             
-        
         elif mons >= 40 and mons <= 69:
+            print(f'{personagem['nome']} VS {monstros["MonstroMedio"]['nome']}')
             print('''1 - Atacar
 2 - Defender
 3 - Correr ''')#monstro 2
+            op = int(input())
+            if op == 1: #Ataque
+                    testeEsqM("MonstroMedio")
+                    dano_causado("MonstroMedio")
+            elif op == 3:
+                    correr=random.randint(1, 10)
+                    if correr >= 1 and correr <= 4:
+                        print('Você conseguiu correr!')
+                        break
+                    elif correr >= 5 and correr <= 10:
+                        print ('Você Morreu tentando correr...')
+                        print (status())
+                        exit()
 
         elif mons >= 70 and mons <= 89:
+            print(f'{personagem['nome']} VS {monstros["MonstroDificil"]['nome']}')
             print('''1 - Atacar
 2 - Defender
 3 - Correr ''')#monstro 3 
+            op = int(input())
+            if op == 1: #Ataque
+                    testeEsqM("MonstroDificil")
+                    dano_causado("MonstroDificil")
+            elif op == 3:
+                    correr=random.randint(1, 10)
+                    if correr >= 1 and correr <= 4:
+                        print('Você conseguiu correr!')
+                        break
+                    elif correr >= 5 and correr <= 10:
+                        print ('Você Morreu tentando correr...')
+                        print (status())
+                        exit()
 
         elif mons >= 90 and mons <= 100:
+            print(f'{personagem['nome']} VS {monstros["MonstroChefe"]['nome']}')
             print('''1 - Atacar
 2 - Defender
 3 - Correr ''')#boss
+            op = int(input())
+            if op == 1: #Ataque
+                    testeEsqM("MonstroChefe")
+                    dano_causado("MonstroChefe")
+            elif op == 3:
+                    correr=random.randint(1, 10)
+                    if correr >= 1 and correr <= 4:
+                        print('Você conseguiu correr!')
+                        break
+                    elif correr >= 5 and correr <= 10:
+                        print ('Você Morreu tentando correr...')
+                        print (status())
+                        exit()
         
 
                 
     continuar = input('Deseja continuar enfrentando desafios? (s/n)')
     if continuar.lower() != 's':
         print('Saindo do jogo. Até a proxima!')
+        print (status())
         #Criar tela final contendo dados do jogador, quantas kills,etc
         break
 
