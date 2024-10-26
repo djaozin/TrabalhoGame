@@ -18,25 +18,25 @@ personagem = {'nome' : nome,
 
 #Dicionario unico que armazena todos os monstros de uma vez, porém separados
 monstros = {'MonstroFraco' : {
-nome : 'Monstro Nvl1',
+'nome' : 'Monstro Nvl1',
 'atk' : 3,
 'def' : 1,
 'hp' : 8,
 'esq' : 2},
 'MonstroMedio' : {
-nome : 'Monstro Nvl2',
+'nome' : 'Monstro Nvl2',
 'atk' : 4,
 'def' : 1,
 'hp' : 12,
 'esq' : 4},
 'MonstroDificil' : {
-nome : 'Monstro Nvl3',
+'nome' : 'Monstro Nvl3',
 'atk' : 6,
 'def' : 2,
 'hp' : 20,
 'esq' : 6},
 'MonstroChefe' : {
-nome : 'Boss',
+'nome' : 'Boss',
 'atk' : 10,
 'def' : 5,
 'hp' : 45,
@@ -47,27 +47,63 @@ def testeEsq(): #Teste de Esquiva
     res_esq = d20_e + personagem['esq']
     return res_esq
 
+def testeEsqM(monstro_tipo): #Teste de Esquiva dos monstros
+    monstro = monstro_tipo
+    d20_em = random.randint(0,20)
+    res_esqm = d20_em + monstros[monstro]['esq']
+    return res_esqm
+
 def testeAtk(): #Teste de Ataque
     d20_a = random.randint(0,20)
     res_atk = d20_a + personagem['atk']
     return res_atk
 
-def dano_causado1():
-    dano_causado1 = personagem['atk'] - monstros['MonstroFraco']['hp']
+def testeAtkM(monstro_tipo): #Teste de Ataque dos monstros
+    monstro = monstro_tipo
+    d20_am = random.randint(0,20)
+    res_atkm = d20_am + monstros[monstro]['atk']
+    return res_atkm
 
-def dano_causado2():
-    dano_causado2 = personagem['atk'] - monstros['MonstroMedio']['hp']
+def dano_causado(monstro_tipo): #Dano causado geral podendo ser usado para todos os monstros
+    res_atk = testeAtk()
+    res_esqm = testeEsqM(monstro_tipo)
+    monstro = monstros[monstro_tipo]
+    if res_esqm > res_atk: #Usa o teste da esquiva do monstro
+        print(f'{monstro_tipo} esquivou do seu ataque! Você não causou dano.')
 
-def dano_causado3():
-    dano_causado3 = personagem['atk'] - monstros['MonstroDificil']['hp']
+    else:
+        if res_atk > monstro['def']: #Caso ele nao esquive, agr verifica se o dano é > defesa
+            dano = res_atk - monstro['def']
+            monstro['hp'] -= dano
+            print(f"{personagem['nome']} causou {dano} de dano ao {monstro['nome']}. HP restante do monstro: {monstro['hp']}")
+            return dano
+        else:
+            print(f"O ataque de {personagem['nome']} falhou! Defesa de {monstro['nome']} foi muito alta.")
+            return 0
+    
+def dano_recebido(monstro_tipo):
+    monstro = monstro_tipo
+    res_atkm = testeAtkM(monstro_tipo)
+    res_esq = testeEsq()
+    if res_esq > res_atkm:
+        print(f'{personagem['nome']} esquivou do ataque do oponente! Nenhum dano recebido.')
+
+    else:
+        if res_atkm > personagem['def']:
+            dano = res_atkm - personagem['def']
+            personagem['hp'] -= dano
+            print(f"{monstro['nome']} causou {dano} de dano ao {personagem['nome']}. HP restante do personagem: {personagem['hp']}")
+            return dano
+        else:
+            print(f'O ataque do {monstro['nome']} falhou! Defesa do {personagem['nome']} foi muito alta.')   
 
 print(f'Seja bem-vindo, {nome}. Você está entrando na caverna... ')
 print('Carregando...')
 time.sleep(1)
 
 print ('-----Você chegou na caverna-----')
-menu = input ('''1 - Para entrar na caverna!\n
-2 - Não entrar na caverna''')
+menu = int(input ('''1 - Para entrar na caverna!\n
+2 - Não entrar na caverna'''))
 if menu == 1:
     print ('Você entrou!!')
         
@@ -110,10 +146,21 @@ while True:
         print('Você Encontrou um monstro!')
         mons = random.randint(0,100)
         
-        if mons >= 0 and mons <= 39:
-            print('''1 - Atacar
-2 - Defender
-3 - Correr ''')#monstro 1
+        if mons >= 0 and mons <= 39: #monstro 1
+            print(f'{personagem['nome']} VS {monstros["MonstroFraco"]['nome']}')
+            while personagem['hp'] > 0 and monstros['MonstroFraco']['hp'] > 0:
+                print('''Seu turno...
+    1 - Atacar
+    2 - Defender
+    3 - Correr ''')
+                op = int(input())
+                if op == 1: #Ataque
+                    testeEsqM("MonstroFraco")
+                    dano_causado("MonstroFraco")
+                        
+
+
+            
         
         elif mons >= 40 and mons <= 69:
             print('''1 - Atacar
