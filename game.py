@@ -17,7 +17,8 @@ personagem = {'nome' : nome,
 'esq': 1,
 'exp': 0,
 'nivel': 1,
-'exp_prox_nivel': 100}
+'exp_prox_nivel': 100,
+'vocacao': []}
 
 #Dicionario unico que armazena todos os monstros de uma vez, porém separados
 monstros = {'MonstroFraco' : {
@@ -44,6 +45,69 @@ monstros = {'MonstroFraco' : {
 'def' : 5,
 'hp' : 45,
 'esq' : 8}}
+
+escolha_vocs = {
+'1' : 'Guerreiro',
+'2' : 'Arqueiro',
+'3' : 'Paladino'
+}
+
+vocs = {
+'Guerreiro' : {
+'atk': 2,
+'def': 1,
+'esq': -1
+},
+
+'Arqueiro' : {
+'atk': 3,
+'def': 1,
+'esq': 0,
+'hp' : -1
+},
+
+'Paladino' : {
+'atk': 1,
+'def': 1,
+'hp' : 1,
+'esq': -1,
+}
+}
+
+escolha_raca = {
+    '1' : 'Anões',
+    '2' : 'Elfos',
+    '3' : 'Humanos'
+}
+raca = {
+'Anões' : {
+'def': 1,
+'hp': 2
+},
+'Elfos' : {
+'atk': 1,
+'esq': 2
+    },
+'Humanos' : {
+'atk': 1,
+'def': 1,
+'esq': 1,
+'hp' : 1
+}
+}
+def escolher_vocacao():
+    print("Escolha sua vocacao:")
+    for chave, valor in escolha_vocs.items():
+        print(f"{chave} - {valor}")
+    voc = input("Digite o numero correspondente: ")
+    return voc
+
+def escolher_raca():
+    for chave, valor in escolha_raca.items():
+        print(f"{chave} - {valor}")
+        raca_selecionada = input("Digite o numero correspondente: ")
+        return raca_selecionada
+
 
 def usar_pocao_vida():
     cura = int(personagem['hp']* 0.5)
@@ -91,7 +155,7 @@ def dano_causado(monstro_tipo): #Dano causado geral podendo ser usado para todos
             print(f"{personagem['nome']} causou {dano} de dano ao {monstro['nome']}. HP restante do monstro: {monstro['hp']}")
             if monstro['hp'] == 0:
                 print(f"{monstro['nome']} foi derrotado!")
-                if mos == "MonstroFacil":
+                if mos == "MonstroFraco":
                     personagem['exp'] += 50
                     print('XP Obtido: 50')
                 elif mos == "MonstroMedio":
@@ -130,7 +194,7 @@ def nivel_jogador():
         personagem['exp'] -= personagem['exp_prox_nivel']
         print(f"{personagem['nome']} subiu para o nível {personagem['nivel']}!")
         personagem['exp_prox_nivel'] = int(personagem['exp_prox_nivel'] * 1.4)
-        print(f"Você tem {personagem['exp']}EXP. Experiencia necessaria para o nível {personagem['nivel']}: {personagem['exp_prox_nivel']}")
+        print(f"Você tem {personagem['exp']}EXP. Experiencia necessaria para o nível {personagem['nivel']}: {personagem['exp_prox_nivel'] - personagem['exp']} ")
     
     else:
         print(f"Você tem {personagem['exp']} EXP. Experiencia necessaria para o nível {personagem['nivel']}: {personagem['exp_prox_nivel']}")
