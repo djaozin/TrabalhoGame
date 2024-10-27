@@ -11,10 +11,13 @@ nome = input('Nome do personagem: ')
 #Uso de dicionario para armazenar as informações do usuario
 personagem = {'nome' : nome,
 'hp': 8,
+'hp_max': 8,
 'atk': 2,
 'def': 1,
 'esq': 1,
-'exp': 0}
+'exp': 0,
+'nivel': 1,
+'exp_prox_nivel': 100}
 
 #Dicionario unico que armazena todos os monstros de uma vez, porém separados
 monstros = {'MonstroFraco' : {
@@ -42,6 +45,10 @@ monstros = {'MonstroFraco' : {
 'hp' : 45,
 'esq' : 8}}
 
+def usar_pocao_vida():
+    cura = int(personagem['hp']* 0.5)
+    personagem['hp'] = min(personagem['hp'] + cura, personagem['hp_max'])
+    print (f"{personagem['nome']} usou uma poção de vida e recuperou {cura} de HP! HP atual: {personagem['hp']}/{personagem['hp_max']}")
 def testeEsq(): #Teste de Esquiva
     res_esq = 0
     d20_e = random.randint(0,20)
@@ -72,6 +79,7 @@ def dano_causado(monstro_tipo): #Dano causado geral podendo ser usado para todos
     res_atk = testeAtk()
     res_esqm = testeEsqM(monstro_tipo)
     monstro = monstros[monstro_tipo]
+    mos = monstro_tipo
     if res_esqm > res_atk: #Usa o teste da esquiva do monstro
         print(f'{monstro_tipo} esquivou do seu ataque! Você não causou dano.')
         return "Esquiva"
@@ -81,15 +89,15 @@ def dano_causado(monstro_tipo): #Dano causado geral podendo ser usado para todos
             dano = res_atk - monstro['def']
             monstro['hp'] = max(0, monstro['hp'] - dano)
             print(f"{personagem['nome']} causou {dano} de dano ao {monstro['nome']}. HP restante do monstro: {monstro['hp']}")
-            if monstro['hp'] <= 0:
+            if monstro['hp'] == 0:
                 print(f"{monstro['nome']} foi derrotado!")
-                if monstro == "MonstroFacil":
+                if mos == "MonstroFacil":
                     personagem['exp'] += 50
                     print('XP Obtido: 50')
-                elif monstro == "MonstroMedio":
+                elif mos == "MonstroMedio":
                     personagem['exp'] += 100
                     print('XP Obtido: 100')
-                elif monstro == "MonstroDificil":
+                elif mos == "MonstroDificil":
                     personagem['exp'] += 200
                     print('XP Obtido: 200')
                 
@@ -115,6 +123,18 @@ def dano_recebido(monstro_tipo):
         else:
             print(f"O ataque do {monstro['nome']} falhou! Defesa do {personagem['nome']} foi muito alta.")
             return 0
+
+def nivel_jogador():
+    if personagem['exp'] >= personagem['exp_prox_nivel']:
+        personagem['nivel'] += 1
+        personagem['exp'] -= personagem['exp_prox_nivel']
+        print(f"{personagem['nome']} subiu para o nível {personagem['nivel']}!")
+        personagem['exp_prox_nivel'] = int(personagem['exp_prox_nivel'] * 1.4)
+        print(f"Você tem {personagem['exp']}EXP. Experiencia necessaria para o nível {personagem['nivel']}: {personagem['exp_prox_nivel']}")
+    
+    else:
+        print(f"Você tem {personagem['exp']} EXP. Experiencia necessaria para o nível {personagem['nivel']}: {personagem['exp_prox_nivel']}")
+
 def status():
     return f'''Seus status:
 HP: {personagem['hp']}
@@ -165,6 +185,7 @@ while True:
                     print('''Você conseguiu abrir o baú!!
     Conteúdo:
     1 poção de vida''')
+                    usar_pocao_vida()
                     break
 
             if tentativas == 0:
@@ -178,9 +199,9 @@ while True:
             print(f"{personagem['nome']} VS {monstros['MonstroFraco']['nome']}")
             while personagem['hp'] > 0 and monstros['MonstroFraco']['hp'] > 0:
                 print('''Seu turno...
-    1 - Atacar
-    2 - Defender
-    3 - Correr ''')
+1 - Atacar
+2 - Defender
+3 - Correr ''')
                 op = int(input())
                 if op == 1: #Ataque
                     testeEsqM("MonstroFraco")
@@ -218,8 +239,8 @@ while True:
             print(f"{personagem['nome']} VS {monstros['MonstroMedio']['nome']}")
             while personagem['hp'] > 0 and monstros['MonstroMedio']['hp'] > 0:
                 print('''1 - Atacar
-    2 - Defender
-    3 - Correr ''')
+2 - Defender
+3 - Correr ''')
                 op = int(input())
                 if op == 1: #Ataque
                         testeEsqM("MonstroMedio")
@@ -260,8 +281,8 @@ while True:
             print(f"{personagem['nome']} VS {monstros['MonstroDificil']['nome']}")
             while personagem['hp'] > 0 and monstros['MonstroDificil']['hp'] > 0:
                 print('''1 - Atacar
-    2 - Defender
-    3 - Correr ''')#monstro 3 
+2 - Defender
+3 - Correr ''')#monstro 3 
                 op = int(input())
                 if op == 1: #Ataque
                         testeEsqM("MonstroDificil")
@@ -317,9 +338,8 @@ while True:
                             print ('Você Morreu tentando correr...')
                             print (status())
                             exit()
-            
-
-                
+    
+    nivel_jogador()
     continuar = input('Deseja continuar enfrentando desafios? (s/n)')
     for monstro in monstros.values(): #for utilizado para restaurar a vida dos monstros e o codigo ter continuidade
         if monstro['nome'] == 'Monstro Nvl1':
