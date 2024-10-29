@@ -56,7 +56,8 @@ vocs = {
 'Guerreiro' : {
 'atk': 2,
 'def': 1,
-'esq': -1
+'esq': -1,
+'hp': 0
 },
 
 'Arqueiro' : {
@@ -81,12 +82,16 @@ escolha_raca = {
 }
 raca = {
 'Anões' : {
+'atk' : 0,
 'def': 1,
+'esq' : 0,
 'hp': 2
 },
 'Elfos' : {
 'atk': 1,
-'esq': 2
+'def': 0,
+'esq': 2,
+'hp':0
     },
 'Humanos' : {
 'atk': 1,
@@ -239,7 +244,49 @@ while True:
         time.sleep(0.5)
         tipo_bau = random.randint(1, 10)
         if tipo_bau == 1 or tipo_bau == 2:
-            print('Você encontrou um baú do tipo mimico') #Prosseguir com o codigo abaixo
+            print('Você encontrou um baú com uma armadilha!') #Prosseguir com o codigo abaixo
+            print(f"{personagem['nome']} VS {monstros['MonstroMedio']['nome']}")
+            while personagem['hp'] > 0 and monstros['MonstroMedio']['hp'] > 0:
+                print('''1 - Atacar
+2 - Defender
+3 - Correr ''')
+                op = int(input())
+                if op == 1: #Ataque
+                        testeEsqM("MonstroMedio")
+                        resultado_causado = dano_causado("MonstroMedio")
+                        if resultado_causado == "Esquiva":
+                            print(f"Turno do {monstros['MonstroMedio']['nome']}...")
+                        if monstros['MonstroMedio']['hp'] > 0:
+                            dano_recebido("MonstroMedio")
+                            if personagem['hp'] <= 0:
+                                print ('Você Morreu...')
+                                print (status())
+                                exit()
+
+                elif op == 2: #defesa
+                    defesa_original = personagem['def']
+                    personagem['def'] = personagem['def'] + 5
+                    print(f"Sua defesa aumentou de {personagem['def'] - 5} para {personagem['def']}.")
+                    print(f"Turno do {monstros['MonstroMedio']['nome']}...")
+                    if monstros['MonstroMedio']['hp'] > 0:
+                            dano_recebido("MonstroMedio")
+                            if personagem['hp'] <= 0:
+                                print ('Você Morreu...')
+                                print (status())
+                                exit()
+                            else:
+                                personagem['def'] = defesa_original
+
+
+                elif op == 3:
+                        correr=random.randint(1, 10)
+                        if correr >= 1 and correr <= 4:
+                            print('Você conseguiu correr!')
+                            break
+                        elif correr >= 5 and correr <= 10:
+                            print ('Você Morreu tentando correr...')
+                            print (status())
+                            exit()
 
         else:
             print('Você encontrou um baú! Iniciando tentativas de abertura...')
@@ -438,6 +485,18 @@ while True:
                             exit()
     
     nivel_jogador()
+    if personagem['nivel'] == 2:
+        for chave, valor in escolha_vocs.items():
+            print(f"{chave} - {valor}")
+        vocs_escolhida = int(input('Escolha sua vocação:'))
+        
+        for vocs_escolhida in escolha_vocs:
+            vocacao = escolha_vocs[vocs_escolhida]
+            personagem['atk'] += vocs[vocacao]['atk']
+            personagem['def'] += vocs[vocacao]['def']
+            personagem['esq'] += vocs[vocacao]['esq']
+            personagem['hp'] += vocs[vocacao]['hp']
+            
     continuar = input('Deseja continuar enfrentando desafios? (s/n)')
     for monstro in monstros.values(): #for utilizado para restaurar a vida dos monstros e o codigo ter continuidade
         if monstro['nome'] == 'Monstro Nvl1':
