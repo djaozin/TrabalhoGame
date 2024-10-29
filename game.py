@@ -1,6 +1,7 @@
 import os
 import time
 import random
+import math
 os.system('cls')
 
 print('''----------A Lenda de Eldoria II----------
@@ -18,7 +19,19 @@ personagem = {'nome' : nome,
 'exp': 0,
 'nivel': 1,
 'exp_prox_nivel': 100,
-'vocacao': []}
+'vocacao': False,
+'raca': False}
+
+atributos_iniciais = {
+'atk': personagem['atk'],
+'def': personagem['def'],
+'esq': personagem['esq'],
+'hp': personagem['hp'],
+'hp_max': personagem['hp_max'],
+'nivel': personagem['nivel'],
+'exp': personagem['exp'],
+'exp_prox_nivel': personagem['exp_prox_nivel']
+}
 
 #Dicionario unico que armazena todos os monstros de uma vez, porém separados
 monstros = {'MonstroFraco' : {
@@ -46,13 +59,13 @@ monstros = {'MonstroFraco' : {
 'hp' : 45,
 'esq' : 8}}
 
-escolha_vocs = {
+escolha_vocs = { #Dicionario com as chaves das vocacoes
 '1' : 'Guerreiro',
 '2' : 'Arqueiro',
 '3' : 'Paladino'
 }
 
-vocs = {
+vocs = { #Dicionario das vocacoes
 'Guerreiro' : {
 'atk': 2,
 'def': 1,
@@ -75,12 +88,12 @@ vocs = {
 }
 }
 
-escolha_raca = {
+escolha_raca = { #Dicionario com as chaves das raças
     '1' : 'Anões',
     '2' : 'Elfos',
     '3' : 'Humanos'
 }
-raca = {
+raca = { #Dicionario das raças
 'Anões' : {
 'atk' : 0,
 'def': 1,
@@ -100,19 +113,6 @@ raca = {
 'hp' : 1
 }
 }
-def escolher_vocacao():
-    print("Escolha sua vocacao:")
-    for chave, valor in escolha_vocs.items():
-        print(f"{chave} - {valor}")
-    voc = input("Digite o numero correspondente: ")
-    return voc
-
-def escolher_raca():
-    for chave, valor in escolha_raca.items():
-        print(f"{chave} - {valor}")
-        raca_selecionada = input("Digite o numero correspondente: ")
-        return raca_selecionada
-
 
 def usar_pocao_vida():
     cura = int(personagem['hp']* 0.5)
@@ -147,12 +147,12 @@ def testeAtkM(monstro_tipo): #Teste de Ataque dos monstros
     res_atkm = 0
     d20_am = random.randint(0,20)
     res_atkm = d20_am + monstros[monstro]['atk']
-    if d20_am == 20:
+    if d20_am == 20: 
         tipo_dano = "Dano Crítico"
         res_atkm *= 2
     else:
         tipo_dano = "Dano Normal"
-    return res_atkm, tipo_dano
+    return res_atkm, tipo_dano #Usado para retornar dois valores do def, o valor do ataque e qual o tipo
 
 def dano_causado(monstro_tipo): #Dano causado geral podendo ser usado para todos os monstros
     res_atk, tipo_dano = testeAtk()
@@ -168,7 +168,8 @@ def dano_causado(monstro_tipo): #Dano causado geral podendo ser usado para todos
             dano = res_atk - monstro['def']
             monstro['hp'] = max(0, monstro['hp'] - dano)
             print(f"{personagem['nome']} causou um {tipo_dano} de {dano} atk ao {monstro['nome']}. HP restante do monstro: {monstro['hp']}")
-            if monstro['hp'] == 0:
+            #Ao derrotar monstros
+            if monstro['hp'] == 0: 
                 print(f"{monstro['nome']} foi derrotado!")
                 if mos == "MonstroFraco":
                     personagem['exp'] += 50
@@ -183,15 +184,15 @@ def dano_causado(monstro_tipo): #Dano causado geral podendo ser usado para todos
             return dano
         else:
             print(f"O ataque de {personagem['nome']} falhou! Defesa de {monstro['nome']} foi muito alta.")
-            return "Esquiva"
+            return "Esquiva" #Este return serve pra informar que o oponente desviou 
     
-def dano_recebido(monstro_tipo):
+def dano_recebido(monstro_tipo): #Dano feito pelos monstros
     monstro = monstro_tipo
     res_atkm, tipo_dano = testeAtkM(monstro_tipo)
     res_esq = testeEsq()
     if res_esq > res_atkm:
         print(f"{personagem['nome']} esquivou do ataque do oponente! Nenhum dano recebido.")
-        return "Esquiva"
+        return "Esquiva" 
 
     else:
         if res_atkm > personagem['def']:
@@ -203,24 +204,36 @@ def dano_recebido(monstro_tipo):
             print(f"O ataque do {monstros[monstro]['nome']} falhou! Defesa do {personagem['nome']} foi muito alta.")
             return 0
 
-def nivel_jogador():
+def nivel_jogador(): #Faz a conferencia do nivel do personagem e atualiza os pontos necessarios para subir pro proximo nivel 
     if personagem['exp'] >= personagem['exp_prox_nivel']:
         personagem['nivel'] += 1
         personagem['exp'] -= personagem['exp_prox_nivel']
         print(f"{personagem['nome']} subiu para o nível {personagem['nivel']}!")
         personagem['exp_prox_nivel'] = int(personagem['exp_prox_nivel'] * 1.4)
-        print(f"Você tem {personagem['exp']}EXP. Experiencia necessaria para o nível {personagem['nivel']}: {personagem['exp_prox_nivel'] - personagem['exp']} ")
+        #Atualizando atributos do personagem (arredondando pra baixo)
+        personagem['atk'] = math.floor(personagem['atk'] * 1.5)
+        personagem['def'] = math.floor(personagem['def'] * 1.5)
+        personagem['esq'] = math.floor(personagem['esq'] * 1.5)
+        personagem['hp_max'] = math.floor(personagem['hp_max'] * 1.5)
+        personagem['hp'] = personagem['hp_max']
+        
+        print(f"Atributos atualizados: ATK={personagem['atk']}, DEF={personagem['def']}, ESQ={personagem['esq']}, HP Máximo={personagem['hp_max']}")
+        print(f"Você tem {personagem['exp']} EXP. Experiência necessária para o nível {personagem['nivel']}: {personagem['exp_prox_nivel'] - personagem['exp']} ")
     
     else:
         print(f"Você tem {personagem['exp']} EXP. Experiencia necessaria para o nível {personagem['nivel']}: {personagem['exp_prox_nivel']}")
 
-def status():
+def status(): #Tras as estatisticas do jogador
     return f'''Seus status:
 HP: {personagem['hp']}
 ATK: {personagem['atk']}
 DEF: {personagem['def']}
 ESQ: {personagem['esq']}
 EXP: {personagem['exp']}'''
+
+def resetar_atributos():
+    for atributo, valor in atributos_iniciais.items():
+        personagem[atributo] = valor
 
 print(f'Seja bem-vindo, {nome}. Você está entrando na caverna... ')
 print('Carregando...')
@@ -243,8 +256,8 @@ while True:
         print('Você entrou em um desafio do baú!')
         time.sleep(0.5)
         tipo_bau = random.randint(1, 10)
-        if tipo_bau == 1 or tipo_bau == 2:
-            print('Você encontrou um baú com uma armadilha!') #Prosseguir com o codigo abaixo
+        if tipo_bau == 1 or tipo_bau == 2: 
+            print('Você encontrou um baú com uma armadilha!') 
             print(f"{personagem['nome']} VS {monstros['MonstroMedio']['nome']}")
             while personagem['hp'] > 0 and monstros['MonstroMedio']['hp'] > 0:
                 print('''1 - Atacar
@@ -261,6 +274,7 @@ while True:
                             if personagem['hp'] <= 0:
                                 print ('Você Morreu...')
                                 print (status())
+                                resetar_atributos()
                                 exit()
 
                 elif op == 2: #defesa
@@ -273,12 +287,13 @@ while True:
                             if personagem['hp'] <= 0:
                                 print ('Você Morreu...')
                                 print (status())
+                                resetar_atributos()
                                 exit()
                             else:
                                 personagem['def'] = defesa_original
 
 
-                elif op == 3:
+                elif op == 3: #Tentativa de fuga
                         correr=random.randint(1, 10)
                         if correr >= 1 and correr <= 4:
                             print('Você conseguiu correr!')
@@ -286,6 +301,7 @@ while True:
                         elif correr >= 5 and correr <= 10:
                             print ('Você Morreu tentando correr...')
                             print (status())
+                            resetar_atributos()
                             exit()
 
         else:
@@ -334,6 +350,7 @@ while True:
                             if personagem['hp'] <= 0:
                                 print ('Você Morreu...')
                                 print (status())
+                                resetar_atributos()
                                 exit()
                 elif op == 2: #defesa
                     defesa_original = personagem['def']
@@ -345,6 +362,7 @@ while True:
                             if personagem['hp'] <= 0:
                                 print ('Você Morreu...')
                                 print (status())
+                                resetar_atributos()
                                 exit()
                             else:
                                 personagem['def'] = defesa_original
@@ -356,6 +374,7 @@ while True:
                     elif correr >= 5 and correr <= 10:
                         print ('Você Morreu tentando correr...')
                         print (status())
+                        resetar_atributos()
                         exit()
             
         elif mons >= 40 and mons <= 69: #monstro 2
@@ -375,6 +394,7 @@ while True:
                             if personagem['hp'] <= 0:
                                 print ('Você Morreu...')
                                 print (status())
+                                resetar_atributos()
                                 exit()
 
                 elif op == 2: #defesa
@@ -387,12 +407,13 @@ while True:
                             if personagem['hp'] <= 0:
                                 print ('Você Morreu...')
                                 print (status())
+                                resetar_atributos()
                                 exit()
                             else:
                                 personagem['def'] = defesa_original
 
 
-                elif op == 3:
+                elif op == 3:#Tentativa de fuga
                         correr=random.randint(1, 10)
                         if correr >= 1 and correr <= 4:
                             print('Você conseguiu correr!')
@@ -400,6 +421,7 @@ while True:
                         elif correr >= 5 and correr <= 10:
                             print ('Você Morreu tentando correr...')
                             print (status())
+                            resetar_atributos()
                             exit()
 
         elif mons >= 70 and mons <= 89:
@@ -419,6 +441,7 @@ while True:
                             if personagem['hp'] <= 0:
                                 print ('Você Morreu...')
                                 print (status())
+                                resetar_atributos()
                                 exit()
                 elif op == 2: #defesa
                     defesa_original = personagem['def']
@@ -430,10 +453,11 @@ while True:
                             if personagem['hp'] <= 0:
                                 print ('Você Morreu...')
                                 print (status())
+                                resetar_atributos()
                                 exit()
                             else:
                                 personagem['def'] = defesa_original
-                elif op == 3:
+                elif op == 3:#Tentativa de fuga
                         correr=random.randint(1, 10)
                         if correr >= 1 and correr <= 4:
                             print('Você conseguiu correr!')
@@ -441,6 +465,7 @@ while True:
                         elif correr >= 5 and correr <= 10:
                             print ('Você Morreu tentando correr...')
                             print (status())
+                            resetar_atributos()
                             exit()
 
         elif mons >= 90 and mons <= 100:
@@ -460,6 +485,7 @@ while True:
                             if personagem['hp'] <= 0:
                                 print ('Você Morreu...')
                                 print (status())
+                                resetar_atributos()
                                 exit()
                 elif op == 2: #defesa
                     defesa_original = personagem['def']
@@ -471,32 +497,55 @@ while True:
                             if personagem['hp'] <= 0:
                                 print ('Você Morreu...')
                                 print (status())
+                                resetar_atributos()
                                 exit()
                             else:
                                 personagem['def'] = defesa_original
-                elif op == 3:
+                elif op == 3: #Tentativa de fuga
                         correr=random.randint(1, 10)
                         if correr >= 1 and correr <= 4:
                             print('Você conseguiu correr!')
                             break
                         elif correr >= 5 and correr <= 10:
                             print ('Você Morreu tentando correr...')
+                            personagem['hp'] = 0
                             print (status())
+                            resetar_atributos()
                             exit()
     
     nivel_jogador()
     if personagem['nivel'] == 2:
         for chave, valor in escolha_vocs.items():
             print(f"{chave} - {valor}")
-        vocs_escolhida = int(input('Escolha sua vocação:'))
+        vocs_escolhida = input('Escolha sua vocação:')
         
-        for vocs_escolhida in escolha_vocs:
+        if vocs_escolhida in escolha_vocs and not personagem['vocacao']: #Uso do not para caso ja tenha escolhido nao mostrar novamente a msg
             vocacao = escolha_vocs[vocs_escolhida]
+            #Implementação dos novos atributos
             personagem['atk'] += vocs[vocacao]['atk']
             personagem['def'] += vocs[vocacao]['def']
             personagem['esq'] += vocs[vocacao]['esq']
             personagem['hp'] += vocs[vocacao]['hp']
+            personagem['hp_max'] += vocs[vocacao]['hp']
             
+            print(f"{personagem['nome']} escolheu a vocação: {vocacao}")
+            print(f"Atributos atualizados: ATK={personagem['atk']}, DEF={personagem['def']}, ESQ={personagem['esq']}, HP= {personagem['hp']}")
+        
+        for chave, valor in escolha_raca.items():
+            print(f"{chave} - {valor}")
+        raca_escolhida = input('Escolha sua raça: ')
+
+        if raca_escolhida in escolha_raca and not personagem['raca']: #Escolhendo raça
+            rac = escolha_raca[raca_escolhida]
+            personagem['atk'] += raca[rac]['atk']
+            personagem['def'] += raca[rac]['def']
+            personagem['esq'] += raca[rac]['esq']
+            personagem['hp'] += raca[rac]['hp']
+            personagem['hp_max'] += raca[rac]['hp']
+
+            print(f"{personagem['nome']} escolheu a raça: {rac}")
+            print(f"Atributos atualizados: ATK={personagem['atk']}, DEF={personagem['def']}, ESQ={personagem['esq']}, HP= {personagem['hp']}")
+
     continuar = input('Deseja continuar enfrentando desafios? (s/n)')
     for monstro in monstros.values(): #for utilizado para restaurar a vida dos monstros e o codigo ter continuidade
         if monstro['nome'] == 'Monstro Nvl1':
@@ -510,6 +559,7 @@ while True:
 
     if continuar.lower() != 's':
         print('Saindo do jogo. Até a proxima!')
+        resetar_atributos()
         print (status())
         #Criar tela final contendo dados do jogador, quantas kills,etc
         break   
