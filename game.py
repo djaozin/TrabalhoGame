@@ -129,30 +129,40 @@ def testeEsqM(monstro_tipo): #Teste de Esquiva dos monstros
 def testeAtk(): #Teste de Ataque
     res_atk = 0
     d20_a = random.randint(0,20)
-    res_atk = d20_a + personagem['atk']
-    return res_atk
+    if d20_a == 20:
+        tipo_dano = "Dano Crítico"
+        res_atk = (d20_a + personagem['atk']) * 2
+    else:
+        res_atk = d20_a + personagem['atk']
+        tipo_dano = "Dano Normal"
+    return res_atk, tipo_dano
 
 def testeAtkM(monstro_tipo): #Teste de Ataque dos monstros
     monstro = monstro_tipo
     res_atkm = 0
     d20_am = random.randint(0,20)
     res_atkm = d20_am + monstros[monstro]['atk']
-    return res_atkm
+    if d20_am == 20:
+        tipo_dano = "Dano Crítico"
+        res_atkm *= 2
+    else:
+        tipo_dano = "Dano Normal"
+    return res_atkm, tipo_dano
 
 def dano_causado(monstro_tipo): #Dano causado geral podendo ser usado para todos os monstros
-    res_atk = testeAtk()
+    res_atk, tipo_dano = testeAtk()
     res_esqm = testeEsqM(monstro_tipo)
     monstro = monstros[monstro_tipo]
     mos = monstro_tipo
     if res_esqm > res_atk: #Usa o teste da esquiva do monstro
-        print(f'{monstro_tipo} esquivou do seu ataque! Você não causou dano.')
+        print(f'{monstro["nome"]} esquivou do seu ataque! Você não causou dano.')
         return "Esquiva"
 
     else:
         if res_atk > monstro['def']: #Caso ele nao esquive, agr verifica se o dano é > defesa
             dano = res_atk - monstro['def']
             monstro['hp'] = max(0, monstro['hp'] - dano)
-            print(f"{personagem['nome']} causou {dano} de dano ao {monstro['nome']}. HP restante do monstro: {monstro['hp']}")
+            print(f"{personagem['nome']} causou um {tipo_dano} de {dano} atk ao {monstro['nome']}. HP restante do monstro: {monstro['hp']}")
             if monstro['hp'] == 0:
                 print(f"{monstro['nome']} foi derrotado!")
                 if mos == "MonstroFraco":
@@ -172,7 +182,7 @@ def dano_causado(monstro_tipo): #Dano causado geral podendo ser usado para todos
     
 def dano_recebido(monstro_tipo):
     monstro = monstro_tipo
-    res_atkm = testeAtkM(monstro_tipo)
+    res_atkm, tipo_dano = testeAtkM(monstro_tipo)
     res_esq = testeEsq()
     if res_esq > res_atkm:
         print(f"{personagem['nome']} esquivou do ataque do oponente! Nenhum dano recebido.")
@@ -182,10 +192,10 @@ def dano_recebido(monstro_tipo):
         if res_atkm > personagem['def']:
             dano = res_atkm - personagem['def']
             personagem['hp'] = max(0, personagem['hp'] - dano)
-            print(f"{monstros[monstro]['nome']} causou {dano} de dano ao {personagem['nome']}. HP restante do personagem: {personagem['hp']}")
+            print(f"{monstros[monstro]['nome']} causou um {tipo_dano} de {dano} atk ao {personagem['nome']}. HP restante do personagem: {personagem['hp']}")
             return dano
         else:
-            print(f"O ataque do {monstro['nome']} falhou! Defesa do {personagem['nome']} foi muito alta.")
+            print(f"O ataque do {monstros[monstro]['nome']} falhou! Defesa do {personagem['nome']} foi muito alta.")
             return 0
 
 def nivel_jogador():
@@ -271,7 +281,7 @@ while True:
                     testeEsqM("MonstroFraco")
                     resultado_causado = dano_causado("MonstroFraco")
                     if resultado_causado == "Esquiva":
-                        print(f"{monstros['MonstroFraco']['nome']} esquivou do seu ataque...")
+                        print(f"Turno do {monstros['MonstroFraco']['nome']}...")
                         if monstros['MonstroFraco']['hp'] > 0:
                             dano_recebido("MonstroFraco")
                             if personagem['hp'] <= 0:
@@ -281,6 +291,8 @@ while True:
                 elif op == 2: #defesa
                     defesa_original = personagem['def']
                     personagem['def'] = personagem['def'] + 5
+                    print(f"Sua defesa aumentou de {personagem['def'] - 5} para {personagem['def']}.")
+                    print(f"Turno do {monstros['MonstroFraco']['nome']}...")
                     if monstros['MonstroFraco']['hp'] > 0:
                             dano_recebido("MonstroFraco")
                             if personagem['hp'] <= 0:
@@ -310,7 +322,7 @@ while True:
                         testeEsqM("MonstroMedio")
                         resultado_causado = dano_causado("MonstroMedio")
                         if resultado_causado == "Esquiva":
-                            print(f"{monstros['MonstroMedio']['nome']} esquivou do seu ataque...")
+                            print(f"Turno do {monstros['MonstroMedio']['nome']}...")
                         if monstros['MonstroMedio']['hp'] > 0:
                             dano_recebido("MonstroMedio")
                             if personagem['hp'] <= 0:
@@ -321,6 +333,8 @@ while True:
                 elif op == 2: #defesa
                     defesa_original = personagem['def']
                     personagem['def'] = personagem['def'] + 5
+                    print(f"Sua defesa aumentou de {personagem['def'] - 5} para {personagem['def']}.")
+                    print(f"Turno do {monstros['MonstroMedio']['nome']}...")
                     if monstros['MonstroMedio']['hp'] > 0:
                             dano_recebido("MonstroMedio")
                             if personagem['hp'] <= 0:
@@ -350,10 +364,20 @@ while True:
                 op = int(input())
                 if op == 1: #Ataque
                         testeEsqM("MonstroDificil")
-                        dano_causado("MonstroDificil")
+                        resultado_causado = dano_causado("MonstroDificil")
+                        if resultado_causado == "Esquiva":
+                            print(f"Turno do {monstros['MonstroDificil']['nome']}...")
+                        if monstros['MonstroDificil']['hp'] > 0:
+                            dano_recebido("MonstroDificil")
+                            if personagem['hp'] <= 0:
+                                print ('Você Morreu...')
+                                print (status())
+                                exit()
                 elif op == 2: #defesa
                     defesa_original = personagem['def']
                     personagem['def'] = personagem['def'] + 5
+                    print(f"Sua defesa aumentou de {personagem['def'] - 5} para {personagem['def']}.")
+                    print(f"Turno do {monstros['MonstroDificil']['nome']}...")
                     if monstros['MonstroDificil']['hp'] > 0:
                             dano_recebido("MonstroDificil")
                             if personagem['hp'] <= 0:
@@ -381,10 +405,20 @@ while True:
                 op = int(input())
                 if op == 1: #Ataque
                         testeEsqM("MonstroChefe")
-                        dano_causado("MonstroChefe")
+                        resultado_causado = dano_causado("MonstroChefe")
+                        if resultado_causado == "Esquiva":
+                            print(f"Turno do {monstros['MonstroChefe']['nome']}...")
+                        if monstros['MonstroChefe']['hp'] > 0:
+                            dano_recebido("MonstroChefe")
+                            if personagem['hp'] <= 0:
+                                print ('Você Morreu...')
+                                print (status())
+                                exit()
                 elif op == 2: #defesa
                     defesa_original = personagem['def']
                     personagem['def'] = personagem['def'] + 5
+                    print(f"Sua defesa aumentou de {personagem['def'] - 5} para {personagem['def']}.")
+                    print(f"Turno do {monstros['MonstroChefe']['nome']}...")
                     if monstros['MonstroChefe']['hp'] > 0:
                             dano_recebido("MonstroChefe")
                             if personagem['hp'] <= 0:
