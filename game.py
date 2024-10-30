@@ -19,8 +19,8 @@ personagem = {'nome' : nome,
 'exp': 0,
 'nivel': 1,
 'exp_prox_nivel': 100,
-'vocacao': False,
-'raca': False}
+'vocacao': None,
+'raca': None}
 
 atributos_iniciais = {
 'atk': personagem['atk'],
@@ -515,36 +515,41 @@ while True:
     
     nivel_jogador()
     if personagem['nivel'] == 2:
-        for chave, valor in escolha_vocs.items():
-            print(f"{chave} - {valor}")
-        vocs_escolhida = input('Escolha sua vocação:')
-        
-        if vocs_escolhida in escolha_vocs and not personagem['vocacao']: #Uso do not para caso ja tenha escolhido nao mostrar novamente a msg
-            vocacao = escolha_vocs[vocs_escolhida]
-            #Implementação dos novos atributos
-            personagem['atk'] += vocs[vocacao]['atk']
-            personagem['def'] += vocs[vocacao]['def']
-            personagem['esq'] += vocs[vocacao]['esq']
-            personagem['hp'] += vocs[vocacao]['hp']
-            personagem['hp_max'] += vocs[vocacao]['hp']
+        if personagem['vocacao'] is None and personagem['raca'] is None:
+
+            for chave, valor in escolha_vocs.items():
+                print(f"{chave} - {valor}")
+            vocs_escolhida = input('Escolha sua vocação:')
             
-            print(f"{personagem['nome']} escolheu a vocação: {vocacao}")
-            print(f"Atributos atualizados: ATK={personagem['atk']}, DEF={personagem['def']}, ESQ={personagem['esq']}, HP= {personagem['hp']}")
-        
-        for chave, valor in escolha_raca.items():
-            print(f"{chave} - {valor}")
-        raca_escolhida = input('Escolha sua raça: ')
+            if vocs_escolhida in escolha_vocs and not personagem['vocacao']: #Uso do not para caso ja tenha escolhido nao mostrar novamente a msg
+                vocacao = escolha_vocs[vocs_escolhida]
+                #Implementação dos novos atributos
+                personagem['atk'] += vocs[vocacao]['atk']
+                personagem['def'] += vocs[vocacao]['def']
+                personagem['esq'] += vocs[vocacao]['esq']
+                personagem['hp'] += vocs[vocacao]['hp']
+                personagem['hp_max'] += vocs[vocacao]['hp']
+                personagem['vocacao'] = vocacao
+                
+                print(f"{personagem['nome']} escolheu a vocação: {vocacao}")
+                print(f"Atributos atualizados: ATK={personagem['atk']}, DEF={personagem['def']}, ESQ={personagem['esq']}, HP= {personagem['hp']}")
+            
+            for chave, valor in escolha_raca.items():
+                print(f"{chave} - {valor}")
+            raca_escolhida = input('Escolha sua raça: ')
 
-        if raca_escolhida in escolha_raca and not personagem['raca']: #Escolhendo raça
-            rac = escolha_raca[raca_escolhida]
-            personagem['atk'] += raca[rac]['atk']
-            personagem['def'] += raca[rac]['def']
-            personagem['esq'] += raca[rac]['esq']
-            personagem['hp'] += raca[rac]['hp']
-            personagem['hp_max'] += raca[rac]['hp']
+            if raca_escolhida in escolha_raca and not personagem['raca']: #Escolhendo raça
+                rac = escolha_raca[raca_escolhida]
 
-            print(f"{personagem['nome']} escolheu a raça: {rac}")
-            print(f"Atributos atualizados: ATK={personagem['atk']}, DEF={personagem['def']}, ESQ={personagem['esq']}, HP= {personagem['hp']}")
+                personagem['atk'] += raca[rac]['atk']
+                personagem['def'] += raca[rac]['def']
+                personagem['esq'] += raca[rac]['esq']
+                personagem['hp'] += raca[rac]['hp']
+                personagem['hp_max'] += raca[rac]['hp']
+                personagem['raca'] = raca
+
+                print(f"{personagem['nome']} escolheu a raça: {rac}")
+                print(f"Atributos atualizados: ATK={personagem['atk']}, DEF={personagem['def']}, ESQ={personagem['esq']}, HP= {personagem['hp']}")
 
     continuar = input('Deseja continuar enfrentando desafios? (s/n)')
     for monstro in monstros.values(): #for utilizado para restaurar a vida dos monstros e o codigo ter continuidade
@@ -559,7 +564,7 @@ while True:
 
     if continuar.lower() != 's':
         print('Saindo do jogo. Até a proxima!')
-        resetar_atributos()
         print (status())
+        resetar_atributos()
         #Criar tela final contendo dados do jogador, quantas kills,etc
         break   
