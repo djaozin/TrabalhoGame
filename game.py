@@ -19,6 +19,9 @@ personagem = {'nome' : nome,
 'exp': 0,
 'nivel': 1,
 'exp_prox_nivel': 100,
+'total_dano': 0,
+'total_kills': 0,
+'total_exp': 0,
 'vocacao': None,
 'raca': None}
 
@@ -137,9 +140,11 @@ def testeAtk(): #Teste de Ataque
     if d20_a == 20:
         tipo_dano = "Dano Crítico"
         res_atk = (d20_a + personagem['atk']) * 2
+        personagem['total_dano'] += res_atk
     else:
         res_atk = d20_a + personagem['atk']
         tipo_dano = "Dano Normal"
+        personagem['total_dano'] += res_atk
     return res_atk, tipo_dano
 
 def testeAtkM(monstro_tipo): #Teste de Ataque dos monstros
@@ -173,12 +178,15 @@ def dano_causado(monstro_tipo): #Dano causado geral podendo ser usado para todos
                 print(f"{monstro['nome']} foi derrotado!")
                 if mos == "MonstroFraco":
                     personagem['exp'] += 50
+                    personagem['total_kills'] += 1
                     print('XP Obtido: 50')
                 elif mos == "MonstroMedio":
                     personagem['exp'] += 100
+                    personagem['total_kills'] += 1
                     print('XP Obtido: 100')
                 elif mos == "MonstroDificil":
                     personagem['exp'] += 200
+                    personagem['total_kills'] += 1
                     print('XP Obtido: 200')
                 
             return dano
@@ -241,14 +249,21 @@ time.sleep(1)
 
 print ('-----Você chegou na caverna-----')
 
-menu = int(input ('''1 - Para entrar na caverna!
+try:
+    menu = int(input ('''1 - Para entrar na caverna!
 2 - Não entrar na caverna
-'''))
-if menu == 1:
-    print ('Você entrou!!')
-elif menu == 2:
-    print ('Você saiu da caverna...')
-    exit()
+    '''))
+    if menu == 1:
+        print ('Você entrou!!')
+    elif menu == 2:
+        print ('Você saiu da caverna...')
+        exit()
+    else:
+        print("Opção inválida. Por favor, digite '1' para sim ou '2' para não. ") 
+        menu = int(input())
+except ValueError:
+    print("Entrada Inválida. Por favor digite um número (1 ou 2).")  
+    menu = int(input())
 
 while True:
     desafio = random.randint(1 , 20)
@@ -260,53 +275,70 @@ while True:
             print('Você encontrou um baú com uma armadilha!') 
             print(f"{personagem['nome']} VS {monstros['MonstroMedio']['nome']}")
             while personagem['hp'] > 0 and monstros['MonstroMedio']['hp'] > 0:
-                print('''1 - Atacar
+                try:
+                    print('''1 - Atacar
+    2 - Defender
+    3 - Correr ''')
+                    op = int(input())
+                
+
+                    if op == 1: #Ataque
+                            testeEsqM("MonstroMedio")
+                            resultado_causado = dano_causado("MonstroMedio")
+                            if resultado_causado == "Esquiva":
+                                print(f"Turno do {monstros['MonstroMedio']['nome']}...")
+                            if monstros['MonstroMedio']['hp'] > 0:
+                                dano_recebido("MonstroMedio")
+                                if personagem['hp'] <= 0:
+                                    print ('Você Morreu...')
+                                    print (status())
+                                    resetar_atributos()
+                                    exit()
+
+                    elif op == 2: #defesa
+                        defesa_original = personagem['def']
+                        personagem['def'] = personagem['def'] + 5
+                        print(f"Sua defesa aumentou de {personagem['def'] - 5} para {personagem['def']}.")
+                        print(f"Turno do {monstros['MonstroMedio']['nome']}...")
+                        if monstros['MonstroMedio']['hp'] > 0:
+                                dano_recebido("MonstroMedio")
+                                if personagem['hp'] <= 0:
+                                    print ('Você Morreu...')
+                                    print (status())
+                                    resetar_atributos()
+                                    exit()
+                                else:
+                                    personagem['def'] = defesa_original
+
+
+                    elif op == 3: #Tentativa de fuga
+                            correr=random.randint(1, 10)
+                            if correr >= 1 and correr <= 4:
+                                print('Você conseguiu correr!')
+                                break
+                            elif correr >= 5 and correr <= 10:
+                                print ('Você Morreu tentando correr...')
+                                print (status())
+                                resetar_atributos()
+                                exit()
+                    else:
+                        print("Opção inválida.")
+                        print('''Seu turno...
+1 - Atacar
 2 - Defender
 3 - Correr ''')
-                op = int(input())
-                if op == 1: #Ataque
-                        testeEsqM("MonstroMedio")
-                        resultado_causado = dano_causado("MonstroMedio")
-                        if resultado_causado == "Esquiva":
-                            print(f"Turno do {monstros['MonstroMedio']['nome']}...")
-                        if monstros['MonstroMedio']['hp'] > 0:
-                            dano_recebido("MonstroMedio")
-                            if personagem['hp'] <= 0:
-                                print ('Você Morreu...')
-                                print (status())
-                                resetar_atributos()
-                                exit()
-
-                elif op == 2: #defesa
-                    defesa_original = personagem['def']
-                    personagem['def'] = personagem['def'] + 5
-                    print(f"Sua defesa aumentou de {personagem['def'] - 5} para {personagem['def']}.")
-                    print(f"Turno do {monstros['MonstroMedio']['nome']}...")
-                    if monstros['MonstroMedio']['hp'] > 0:
-                            dano_recebido("MonstroMedio")
-                            if personagem['hp'] <= 0:
-                                print ('Você Morreu...')
-                                print (status())
-                                resetar_atributos()
-                                exit()
-                            else:
-                                personagem['def'] = defesa_original
-
-
-                elif op == 3: #Tentativa de fuga
-                        correr=random.randint(1, 10)
-                        if correr >= 1 and correr <= 4:
-                            print('Você conseguiu correr!')
-                            break
-                        elif correr >= 5 and correr <= 10:
-                            print ('Você Morreu tentando correr...')
-                            print (status())
-                            resetar_atributos()
-                            exit()
-
+                        op = int(input())
+                        
+                except ValueError:
+                    print("Opção Inválida.")
+                    print('''Seu turno...
+1 - Atacar  
+2 - Defender
+3 - Correr ''')
+                    
         else:
             print('Você encontrou um baú! Iniciando tentativas de abertura...')
-
+                
             tentativas = 3 #Maximo de tentativas 
             cont_tent = 1 #Contagem pra mostrar ao usuario a tentativa atual
             while tentativas > 0:
@@ -335,85 +367,40 @@ while True:
         if mons >= 0 and mons <= 39: #monstro 1
             print(f"{personagem['nome']} VS {monstros['MonstroFraco']['nome']}")
             while personagem['hp'] > 0 and monstros['MonstroFraco']['hp'] > 0:
-                print('''Seu turno...
-1 - Atacar
-2 - Defender
-3 - Correr ''')
-                op = int(input())
-                if op == 1: #Ataque
-                    testeEsqM("MonstroFraco")
-                    resultado_causado = dano_causado("MonstroFraco")
-                    if resultado_causado == "Esquiva":
+                try:
+                    print('''Seu turno...
+    1 - Atacar
+    2 - Defender
+    3 - Correr ''')
+                    op = int(input())
+
+                    if op == 1: #Ataque
+                        testeEsqM("MonstroFraco")
+                        resultado_causado = dano_causado("MonstroFraco")
+                        if resultado_causado == "Esquiva":
+                            print(f"Turno do {monstros['MonstroFraco']['nome']}...")
+                            if monstros['MonstroFraco']['hp'] > 0:
+                                dano_recebido("MonstroFraco")
+                                if personagem['hp'] <= 0:
+                                    print ('Você Morreu...')
+                                    print (status())
+                                    resetar_atributos()
+                                    exit()
+                    elif op == 2: #defesa
+                        defesa_original = personagem['def']
+                        personagem['def'] = personagem['def'] + 5
+                        print(f"Sua defesa aumentou de {personagem['def'] - 5} para {personagem['def']}.")
                         print(f"Turno do {monstros['MonstroFraco']['nome']}...")
                         if monstros['MonstroFraco']['hp'] > 0:
-                            dano_recebido("MonstroFraco")
-                            if personagem['hp'] <= 0:
-                                print ('Você Morreu...')
-                                print (status())
-                                resetar_atributos()
-                                exit()
-                elif op == 2: #defesa
-                    defesa_original = personagem['def']
-                    personagem['def'] = personagem['def'] + 5
-                    print(f"Sua defesa aumentou de {personagem['def'] - 5} para {personagem['def']}.")
-                    print(f"Turno do {monstros['MonstroFraco']['nome']}...")
-                    if monstros['MonstroFraco']['hp'] > 0:
-                            dano_recebido("MonstroFraco")
-                            if personagem['hp'] <= 0:
-                                print ('Você Morreu...')
-                                print (status())
-                                resetar_atributos()
-                                exit()
-                            else:
-                                personagem['def'] = defesa_original
-                elif op == 3:
-                    correr=random.randint(1, 10)
-                    if correr >= 1 and correr <= 4:
-                        print('Você conseguiu correr!')
-                        break
-                    elif correr >= 5 and correr <= 10:
-                        print ('Você Morreu tentando correr...')
-                        print (status())
-                        resetar_atributos()
-                        exit()
-            
-        elif mons >= 40 and mons <= 69: #monstro 2
-            print(f"{personagem['nome']} VS {monstros['MonstroMedio']['nome']}")
-            while personagem['hp'] > 0 and monstros['MonstroMedio']['hp'] > 0:
-                print('''1 - Atacar
-2 - Defender
-3 - Correr ''')
-                op = int(input())
-                if op == 1: #Ataque
-                        testeEsqM("MonstroMedio")
-                        resultado_causado = dano_causado("MonstroMedio")
-                        if resultado_causado == "Esquiva":
-                            print(f"Turno do {monstros['MonstroMedio']['nome']}...")
-                        if monstros['MonstroMedio']['hp'] > 0:
-                            dano_recebido("MonstroMedio")
-                            if personagem['hp'] <= 0:
-                                print ('Você Morreu...')
-                                print (status())
-                                resetar_atributos()
-                                exit()
-
-                elif op == 2: #defesa
-                    defesa_original = personagem['def']
-                    personagem['def'] = personagem['def'] + 5
-                    print(f"Sua defesa aumentou de {personagem['def'] - 5} para {personagem['def']}.")
-                    print(f"Turno do {monstros['MonstroMedio']['nome']}...")
-                    if monstros['MonstroMedio']['hp'] > 0:
-                            dano_recebido("MonstroMedio")
-                            if personagem['hp'] <= 0:
-                                print ('Você Morreu...')
-                                print (status())
-                                resetar_atributos()
-                                exit()
-                            else:
-                                personagem['def'] = defesa_original
-
-
-                elif op == 3:#Tentativa de fuga
+                                dano_recebido("MonstroFraco")
+                                if personagem['hp'] <= 0:
+                                    print ('Você Morreu...')
+                                    print (status())
+                                    resetar_atributos()
+                                    exit()
+                                else:
+                                    personagem['def'] = defesa_original
+                    elif op == 3:
                         correr=random.randint(1, 10)
                         if correr >= 1 and correr <= 4:
                             print('Você conseguiu correr!')
@@ -423,96 +410,201 @@ while True:
                             print (status())
                             resetar_atributos()
                             exit()
+                    else:
+                        print("Opção inválida.")
+                        print('''Seu turno...
+1 - Atacar
+2 - Defender
+3 - Correr ''')
+                        
+                except ValueError:
+                    print("Opção Inválida.")
+                    print('''Seu turno...
+1 - Atacar  
+2 - Defender
+3 - Correr ''')
+
+        elif mons >= 40 and mons <= 69: #monstro 2
+            print(f"{personagem['nome']} VS {monstros['MonstroMedio']['nome']}")
+            while personagem['hp'] > 0 and monstros['MonstroMedio']['hp'] > 0:
+                try:
+                    print('''1 - Atacar
+    2 - Defender
+    3 - Correr ''')
+                    op = int(input())
+
+                    if op == 1: #Ataque
+                            testeEsqM("MonstroMedio")
+                            resultado_causado = dano_causado("MonstroMedio")
+                            if resultado_causado == "Esquiva":
+                                print(f"Turno do {monstros['MonstroMedio']['nome']}...")
+                            if monstros['MonstroMedio']['hp'] > 0:
+                                dano_recebido("MonstroMedio")
+                                if personagem['hp'] <= 0:
+                                    print ('Você Morreu...')
+                                    print (status())
+                                    resetar_atributos()
+                                    exit()
+
+                    elif op == 2: #defesa
+                        defesa_original = personagem['def']
+                        personagem['def'] = personagem['def'] + 5
+                        print(f"Sua defesa aumentou de {personagem['def'] - 5} para {personagem['def']}.")
+                        print(f"Turno do {monstros['MonstroMedio']['nome']}...")
+                        if monstros['MonstroMedio']['hp'] > 0:
+                                dano_recebido("MonstroMedio")
+                                if personagem['hp'] <= 0:
+                                    print ('Você Morreu...')
+                                    print (status())
+                                    resetar_atributos()
+                                    exit()
+                                else:
+                                    personagem['def'] = defesa_original
+
+
+                    elif op == 3:#Tentativa de fuga
+                            correr=random.randint(1, 10)
+                            if correr >= 1 and correr <= 4:
+                                print('Você conseguiu correr!')
+                                break
+                            elif correr >= 5 and correr <= 10:
+                                print ('Você Morreu tentando correr...')
+                                print (status())
+                                resetar_atributos()
+                                exit()
+                    else:
+                        print("Opção inválida.")
+                        print('''Seu turno...
+1 - Atacar
+2 - Defender
+3 - Correr ''')
+                        
+                except ValueError:
+                    print("Opção Inválida.")
+                    print('''Seu turno...
+1 - Atacar  
+2 - Defender
+3 - Correr ''')
 
         elif mons >= 70 and mons <= 89:
             print(f"{personagem['nome']} VS {monstros['MonstroDificil']['nome']}")
             while personagem['hp'] > 0 and monstros['MonstroDificil']['hp'] > 0:
-                print('''1 - Atacar
-2 - Defender
-3 - Correr ''')#monstro 3 
-                op = int(input())
-                if op == 1: #Ataque
-                        testeEsqM("MonstroDificil")
-                        resultado_causado = dano_causado("MonstroDificil")
-                        if resultado_causado == "Esquiva":
-                            print(f"Turno do {monstros['MonstroDificil']['nome']}...")
+                try:
+                    print('''1 - Atacar
+    2 - Defender
+    3 - Correr ''')#monstro 3 
+                    op = int(input())
+
+                    if op == 1: #Ataque
+                            testeEsqM("MonstroDificil")
+                            resultado_causado = dano_causado("MonstroDificil")
+                            if resultado_causado == "Esquiva":
+                                print(f"Turno do {monstros['MonstroDificil']['nome']}...")
+                            if monstros['MonstroDificil']['hp'] > 0:
+                                dano_recebido("MonstroDificil")
+                                if personagem['hp'] <= 0:
+                                    print ('Você Morreu...')
+                                    print (status())
+                                    resetar_atributos()
+                                    exit()
+                    elif op == 2: #defesa
+                        defesa_original = personagem['def']
+                        personagem['def'] = personagem['def'] + 5
+                        print(f"Sua defesa aumentou de {personagem['def'] - 5} para {personagem['def']}.")
+                        print(f"Turno do {monstros['MonstroDificil']['nome']}...")
                         if monstros['MonstroDificil']['hp'] > 0:
-                            dano_recebido("MonstroDificil")
-                            if personagem['hp'] <= 0:
-                                print ('Você Morreu...')
+                                dano_recebido("MonstroDificil")
+                                if personagem['hp'] <= 0:
+                                    print ('Você Morreu...')
+                                    print (status())
+                                    resetar_atributos()
+                                    exit()
+                                else:
+                                    personagem['def'] = defesa_original
+                    elif op == 3:#Tentativa de fuga
+                            correr=random.randint(1, 10)
+                            if correr >= 1 and correr <= 4:
+                                print('Você conseguiu correr!')
+                                break
+                            elif correr >= 5 and correr <= 10:
+                                print ('Você Morreu tentando correr...')
                                 print (status())
                                 resetar_atributos()
                                 exit()
-                elif op == 2: #defesa
-                    defesa_original = personagem['def']
-                    personagem['def'] = personagem['def'] + 5
-                    print(f"Sua defesa aumentou de {personagem['def'] - 5} para {personagem['def']}.")
-                    print(f"Turno do {monstros['MonstroDificil']['nome']}...")
-                    if monstros['MonstroDificil']['hp'] > 0:
-                            dano_recebido("MonstroDificil")
-                            if personagem['hp'] <= 0:
-                                print ('Você Morreu...')
-                                print (status())
-                                resetar_atributos()
-                                exit()
-                            else:
-                                personagem['def'] = defesa_original
-                elif op == 3:#Tentativa de fuga
-                        correr=random.randint(1, 10)
-                        if correr >= 1 and correr <= 4:
-                            print('Você conseguiu correr!')
-                            break
-                        elif correr >= 5 and correr <= 10:
-                            print ('Você Morreu tentando correr...')
-                            print (status())
-                            resetar_atributos()
-                            exit()
+                    else:
+                        print("Opção inválida.")
+                        print('''Seu turno...
+1 - Atacar
+2 - Defender
+3 - Correr ''')
+                        
+                except ValueError:
+                    print("Opção Inválida.")
+                    print('''Seu turno...
+1 - Atacar  
+2 - Defender
+3 - Correr ''')
 
         elif mons >= 90 and mons <= 100:
             print(f"{personagem['nome']} VS {monstros['MonstroChefe']['nome']}")
             while personagem['hp'] > 0 and monstros['MonstroChefe']['hp'] > 0:
-                print('''1 - Atacar
-2 - Defender
-3 - Correr ''')#boss
-                op = int(input())
-                if op == 1: #Ataque
-                        testeEsqM("MonstroChefe")
-                        resultado_causado = dano_causado("MonstroChefe")
-                        if resultado_causado == "Esquiva":
-                            print(f"Turno do {monstros['MonstroChefe']['nome']}...")
+                try:
+                    print('''1 - Atacar
+    2 - Defender
+    3 - Correr ''')#boss
+                    op = int(input())
+
+                    if op == 1: #Ataque
+                            testeEsqM("MonstroChefe")
+                            resultado_causado = dano_causado("MonstroChefe")
+                            if resultado_causado == "Esquiva":
+                                print(f"Turno do {monstros['MonstroChefe']['nome']}...")
+                            if monstros['MonstroChefe']['hp'] > 0:
+                                dano_recebido("MonstroChefe")
+                                if personagem['hp'] <= 0:
+                                    print ('Você Morreu...')
+                                    print (status())
+                                    resetar_atributos()
+                                    exit()
+                    elif op == 2: #defesa
+                        defesa_original = personagem['def']
+                        personagem['def'] = personagem['def'] + 5
+                        print(f"Sua defesa aumentou de {personagem['def'] - 5} para {personagem['def']}.")
+                        print(f"Turno do {monstros['MonstroChefe']['nome']}...")
                         if monstros['MonstroChefe']['hp'] > 0:
-                            dano_recebido("MonstroChefe")
-                            if personagem['hp'] <= 0:
-                                print ('Você Morreu...')
+                                dano_recebido("MonstroChefe")
+                                if personagem['hp'] <= 0:
+                                    print ('Você Morreu...')
+                                    print (status())
+                                    resetar_atributos()
+                                    exit()
+                                else:
+                                    personagem['def'] = defesa_original
+                    elif op == 3: #Tentativa de fuga
+                            correr=random.randint(1, 10)
+                            if correr >= 1 and correr <= 4:
+                                print('Você conseguiu correr!')
+                                break
+                            elif correr >= 5 and correr <= 10:
+                                print ('Você Morreu tentando correr...')
+                                personagem['hp'] = 0
                                 print (status())
                                 resetar_atributos()
                                 exit()
-                elif op == 2: #defesa
-                    defesa_original = personagem['def']
-                    personagem['def'] = personagem['def'] + 5
-                    print(f"Sua defesa aumentou de {personagem['def'] - 5} para {personagem['def']}.")
-                    print(f"Turno do {monstros['MonstroChefe']['nome']}...")
-                    if monstros['MonstroChefe']['hp'] > 0:
-                            dano_recebido("MonstroChefe")
-                            if personagem['hp'] <= 0:
-                                print ('Você Morreu...')
-                                print (status())
-                                resetar_atributos()
-                                exit()
-                            else:
-                                personagem['def'] = defesa_original
-                elif op == 3: #Tentativa de fuga
-                        correr=random.randint(1, 10)
-                        if correr >= 1 and correr <= 4:
-                            print('Você conseguiu correr!')
-                            break
-                        elif correr >= 5 and correr <= 10:
-                            print ('Você Morreu tentando correr...')
-                            personagem['hp'] = 0
-                            print (status())
-                            resetar_atributos()
-                            exit()
-    
+                    else:
+                        print("Opção inválida.")
+                        print('''Seu turno...
+1 - Atacar
+2 - Defender
+3 - Correr ''')
+                        
+                except ValueError:
+                    print("Opção Inválida.")
+                    print('''Seu turno...
+1 - Atacar  
+2 - Defender
+3 - Correr ''')
+
     nivel_jogador()
     if personagem['nivel'] == 2:
         if personagem['vocacao'] is None and personagem['raca'] is None:
@@ -567,4 +659,4 @@ while True:
         print (status())
         resetar_atributos()
         #Criar tela final contendo dados do jogador, quantas kills,etc
-        break   
+        break
