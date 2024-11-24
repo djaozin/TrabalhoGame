@@ -1,0 +1,162 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Layout Principal */
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #EDE1CE;
+    color: #C49A6C;
+}
+
+header {
+    background-color: #4B2C3D;
+    padding: 15px;
+    text-align: center;
+    color: #C49A6C;
+}
+
+nav ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    margin-top: 10px;
+}
+
+nav ul li {
+    margin: 0 10px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #eeeeee9c;
+    font-weight: bold;
+}
+
+main {
+    display: flex;
+    flex-grow: 1;
+    padding: 20px;
+}
+
+/* Seção do personagem */
+#perfil-personagem {
+    flex: 2;
+    background-color: #4B2C3D;
+    padding: 20px;
+    border-radius: 8px;
+    margin-right: 20px;
+    text-align: center;
+}
+
+#perfil-personagem img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 15px;
+}
+
+/* Status de batalha */
+#status-batalha {
+    flex: 3;
+    background-color: #3e122a;
+    padding: 20px;
+    border-radius: 8px;
+    margin-right: 20px;
+    
+}
+
+.status {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 25px;
+}
+
+.acoes-combate button {
+    background-color: #f9b233;
+    color: #333;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: bold;
+    
+}
+
+.batalha h2{
+display: flex;
+justify-content: center; 
+align-items: center;
+margin-bottom: 35px;
+
+}
+
+.acoes-combate button:hover {
+    background-color: #d18a1d;
+}
+
+.acoes-combate{
+display: flex;
+justify-content: center; 
+align-items: center; 
+
+}
+
+#encounters {
+    flex: 2;
+    background-color: #4B2C3D;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.monstros-lista {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.monstro {
+    background-color: #4b10319d;
+    color: #f9b233;
+    padding: 10px;
+    border-radius: 5px;
+    flex: 1 1 45%;
+    text-align: center;
+}
+
+aside#habi {
+    flex: 1;
+    background-color: #4B2C3D;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+#habilidades h2 {
+    color: #f9b233;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+#habilidades ul {
+    list-style: none;
+}
+
+#habilidades ul li {
+    padding: 5px;
+    border-bottom: 1px solid #444;
+}
+
+footer {
+    background-color: #333;
+    padding: 10px;
+    text-align: center;
+    color: #888;
+}
