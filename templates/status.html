@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Status do Jogador</title>
+  <link rel="stylesheet" href="statusstyle.css">
+</head>
+<body>
+  <header>
+    <h1>ELDORIA</h1>
+    </head>
+    <body>
+        <nav>
+            <ul>
+                <li><a href="#personagem">Personagem</a></li>
+                <li><a href="#historia">História</a></li>
+                <li><a href="#status">Status</a></li>
+                <li><a href="#combate">Combate</a></li>
+            </ul>
+</header>
+  <div class="status-container">
+    <div class="header">Status do Jogador</div>
+    <div class="status-row">
+      <span class="status-label">Nome:</span>
+      <span class="status-value" id="nome">Desconhecido</span>
+    </div>
+    <div class="status-row">
+      <span class="status-label">HP:</span>
+      <span class="status-value" id="hp">8 / 8</span>
+    </div>
+    <div class="status-row">
+      <span class="status-label">ATK:</span>
+      <span class="status-value" id="atk">2</span>
+    </div>
+    <div class="status-row">
+      <span class="status-label">DEF:</span>
+      <span class="status-value" id="def">1</span>
+    </div>
+    <div class="status-row">
+      <span class="status-label">ESQ:</span>
+      <span class="status-value" id="esq">1</span>
+    </div>
+    <div class="status-row">
+      <span class="status-label">EXP:</span>
+      <span class="status-value" id="exp">0 / 100</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-bar-fill" id="exp-bar" style="width: 0%;"></div>
+    </div>
+    <div class="status-row">
+      <span class="status-label">Nível:</span>
+      <span class="status-value" id="nivel">1</span>
+    </div>
+    <div class="status-row">
+      <span class="status-label">Total Dano:</span>
+      <span class="status-value" id="total-dano">0</span>
+    </div>
+    <div class="status-row">
