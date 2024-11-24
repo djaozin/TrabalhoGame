@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Combate - Eldoria</title>
+    <link rel="stylesheet" href="combatestyle.css">
+</head>
+<body>
+    <header>
+        <h1>ELDORIA</h1>
+        <nav>
+            <ul>
+                <li><a href="#personagem">Personagem</a></li>
+                <li><a href="#inventario">História</a></li>
+                <li><a href="#status">Status</a></li>
+                <li><a href="#encounters">Combates</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="batalha-container">
+            <!-- Detalhes do Jogador vs Monstro -->
+            <div class="combate-header">
+                <div class="jogador">
+                    <img src="jogador.jpg" alt="Imagem do Jogador">
+                    <h3>Jogador</h3>
+                </div>
+                <div class="versus">VS</div>
+                <div class="monstro">
+                    <img src="monstro.jpg" alt="Imagem do Monstro">
+                    <h3>Dragão de Fogo</h3>
+                </div>
+            </div>
+
+            <!-- Status do Jogador e do Monstro -->
+            <div class="status-combate">
+                <p>Seu HP: <span id="hp-jogador">80/100</span></p>
+                <p>Monstro HP: <span id="hp-monstro">120/120</span></p>
+            </div>
+
+            <!-- Botões de Ação -->
+            <div class="acoes-combate">
+                <button onclick="atacar()">Atacar</button>
+                <button onclick="esquivar()">Esquivar</button>
+                <button onclick="fugir()">Fugir</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Desenvolvido por Garotos de Programa</p>
+    </footer>
+
+    <script>
+        // Lógica simples para simular ações
+        function atacar() {
+            alert("Você atacou o monstro!");
+        }
+
+        function habilidade() {
+            alert("Você usou uma habilidade especial!");
+        }
+
+        function fugir() {
+            alert("Você fugiu da batalha!");
+        }
+    </script>
+</body>
+</html>
