@@ -1,0 +1,81 @@
+/* Estilo Global */
+body {
+    font-family: 'Georgia', serif;
+    margin: 0;
+    padding: 0;
+    background-color: #EDE1CE; 
+    color: #2C2C2C; 
+    line-height: 1.6;
+}
+
+h1, h2, h3 {
+    color: #6D4D86; 
+}
+
+/* Cabeçalho */
+header {
+    background-color: #4B2C3D; 
+    padding: 10px 20px;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    color: #C49A6C;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #EDE1CE; 
+    font-size: 1.2rem;
+}
+
+nav ul li a:hover {
+    color: #C49A6C; 
+}
+
+.container-historia {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #FFF; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+#capitulos .capitulo {
+    background-color: #F7F3ED;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-left: 5px solid #6D4D86; 
+}
+
+#capitulos .capitulo h3 {
+    margin: 0 0 5px;
+}
+
+.lista-personagens {
+    list-style: none;
+    padding: 0;
+}
+
+.lista-personagens li {
+    margin-bottom: 10px;
+}
+
+/* Rodapé */
+footer {
+    background-color: #4B2C3D; 
+    color: #EDE1CE; 
+    text-align: center;
+    padding: 10px;
+}
