@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ELDORIA RPG</title>
+    <link rel="stylesheet" href="homestyle.css">
+</head>
+
+<body>
+    <header>
+        <h1>ELDORIA</h1>
+        <nav>
+            <ul>
+                <li><a href="#personagem">Personagem</a></li>
+                <li><a href="#inventario">História</a></li>
+                <li><a href="#status">Status</a></li>
+                <li><a href="#encounters">Combates</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Área principal do conteúdo -->
+    <main>
+        <!-- Seção para o perfil do personagem -->
+        <section id="perfil-personagem">
+            <div class="imagem-personagem">
+                <img src="Personagem_nvl1.webp" alt="Imagem do personagem">
+            </div>
+            <div class="informacoes-personagem">
+                <h2>Nome do Personagem</h2>
+                <p>Nível: 1</p>
+                <p>Classe: N/D</p>
+                <p>Vocação: N/D</p>
+                <!-- Outros detalhes do personagem -->
+            </div>
+        </section>
+
+        <!-- Seção de informações de batalha e status -->
+        <section id="status-batalha">
+            <div class="batalha">
+                <h2>Caverna</h2>
+                <!-- Status do combate (HP, MP, etc.) -->
+                <div class="status">
+                    <p>HP: <span id="hp">80/100</span></p>
+                    <p>EXP: <span id="exp">30/50</span></p>
+                </div>
+                <!-- Botões de ação para o combate -->
+                <div class="acoes-combate">
+                    <button>Entrar</button>
+                    <button>Sair</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de encontros e inventário -->
+        <section id="encounters">
+            <h2>Monstros</h2>
+            <div class="monstros-lista">
+                <!-- Lista de encontros disponíveis -->
+                <div class="monstro">Dragão</div>
+                <div class="monstro">Goblin</div>
+                <!-- Outros encontros -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Barra lateral para inventário e habilidades -->
+    <aside id="habi">
+
+        <h2>Habilidades</h2>
+        <div class="habilidades">
+            <p>Vocações:</p>
+            <ul>
+                <li>Guerreiro</li>
+                <li>Arqueiro</li>
+                <li>Paladino</li>
+            </ul>
+        </div>
+    </aside>
+
+    <footer>
+        <p>Desenvolvido Garotos de Programa</p>
+    </footer>
+</body>
+</html>
